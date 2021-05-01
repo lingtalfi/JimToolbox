@@ -169,3 +169,8 @@
 .jim-toolbox .toolbox-module {
     display: none;
 }
+
+
+.jim-toolbox .toolbox-error-color {
+    color: red;
+}

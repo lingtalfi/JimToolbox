@@ -21,13 +21,17 @@ if ('undefined' === typeof JimToolbox) {
                     context: null,
                     useToggleShortcut: true,
                     toggleShortcutKey: "t",
+                    isVisible: false,
+                    openId: null,
                 }, options);
 
 
                 var jToolbox = options.context;
                 var useToggleShortcut = options.useToggleShortcut;
                 var toggleShortcutKey = options.toggleShortcutKey;
+                var isVisible = options.isVisible;
                 var maxHeight = 454;
+                var openId = options.openId;
                 var itemMarginBottom = 7;
                 var toggleSlideTopElementIndex = 1;
                 var toggleSlideTopElementOffset = 0;
@@ -171,6 +175,34 @@ if ('undefined' === typeof JimToolbox) {
                 }
 
 
+                function openPaneByTargetId(targetId) {
+                    jToolboxContent.find(".toolbox-module").each(function () {
+                        if (targetId === $(this).attr('data-id')) {
+                            $(this).show();
+                            aPanelIsOpened = true;
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                    jToolbox.addClass('open');
+                }
+
+
+                function injectContent(jPane, content, title) {
+                    var jBody = jPane.find('.toolbox-body');
+                    jBody.empty();
+                    jBody.html(content);
+
+                    if ('undefined' !== typeof title) {
+                        var jTitle = jPane.find('.toolbox-title-text');
+                        if (0 === jTitle.length) {
+                            throw new Error("The acp pane title container wasn't found (.toolbox-title-text)");
+                        }
+                        jTitle.html(title);
+                    }
+                }
+
+
                 jToolbox.on('click.toolbox', function (e) {
                     var jTarget = $(e.target);
                     if (true === jTarget.hasClass("text-toggle-minus")) {
@@ -203,15 +235,50 @@ if ('undefined' === typeof JimToolbox) {
                     var jTarget = $(this);
 
                     var targetId = jTarget.attr('data-target');
-                    jToolboxContent.find(".toolbox-module").each(function () {
-                        if (targetId === $(this).attr('data-id')) {
-                            $(this).show();
-                            aPanelIsOpened = true;
-                        } else {
-                            $(this).hide();
+                    if ('undefined' !== typeof targetId) {
+                        openPaneByTargetId(targetId);
+                    } else {
+                        var acpUrl = jTarget.attr('data-acp');
+                        if ('undefined' !== acpUrl) {
+
+
+                            var jPane = jToolboxContent.find(".toolbox-module[data-id=_acp]");
+                            if (0 === jPane.length) {
+                                throw new Error("The acp pane wasn't found.");
+                            }
+                            openPaneByTargetId('_acp');
+
+                            var jBody = jPane.find('.toolbox-body');
+                            if (0 === jBody.length) {
+                                throw new Error("The body of the acp pane wasn't found (.toolbox-body).");
+                            }
+
+                            var jLoader = jPane.find('.toolbox-loader');
+                            if (0 === jLoader.length) {
+                                throw new Error("The acp pane loader wasn't found (.toolbox-loader).");
+                            }
+
+
+                            jLoader.show();
+
+
+                            AcpHepHelper.post(acpUrl, {}, function (response) {
+                                if (response.content) {
+                                    injectContent(jPane, response.content, response.title);
+                                } else {
+                                    throw new Error("Invalid response: no content property found.");
+                                }
+                                jLoader.hide();
+
+                            }, function (errorMsg, response) {
+                                var title = response.title || "Error";
+                                errorMsg = '<div class="toolbox-error-color">' + errorMsg + '</div>';
+                                injectContent(jPane, errorMsg, title);
+                                jLoader.hide();
+                            });
                         }
-                    });
-                    jToolbox.addClass('open');
+                    }
+
                     return false;
                 });
 
@@ -236,6 +303,17 @@ if ('undefined' === typeof JimToolbox) {
                         }
                     });
                 }
+
+
+                if (true === isVisible) {
+                    jToolbox.removeClass("toolbox-close");
+                }
+
+
+                if (null !== openId) {
+                    openPaneByTargetId(openId);
+                }
+
 
                 refreshArrows();
 
