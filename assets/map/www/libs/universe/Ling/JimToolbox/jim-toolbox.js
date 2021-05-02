@@ -213,6 +213,7 @@ if ('undefined' === typeof JimToolbox) {
                         jToggleContainer.addClass("without-text");
                         refreshArrows();
                         repositionToggleItems();
+                        return false;
                     } else if (true === jTarget.hasClass("text-toggle-plus")) {
                         disableTransition();
                         jToolbox.find('.text-toggle-plus').hide();
@@ -220,14 +221,16 @@ if ('undefined' === typeof JimToolbox) {
                         jToggleContainer.removeClass("without-text");
                         refreshArrows();
                         repositionToggleItems();
+                        return false;
                     } else if (true === jTarget.hasClass("arrow-icon-down")) {
                         enableTransition();
                         slideToggleItem('down');
+                        return false;
                     } else if (true === jTarget.hasClass("arrow-icon-up")) {
                         enableTransition();
                         slideToggleItem('up');
+                        return false;
                     }
-                    return false;
                 });
 
 

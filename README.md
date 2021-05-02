@@ -1,6 +1,6 @@
 JimToolbox
 ===========
-2021-04-15 -> 2021-05-01
+2021-04-15 -> 2021-05-02
 
 
 
@@ -42,6 +42,10 @@ Summary
 
 History Log
 =============
+
+- 1.0.2 -- 2021-05-02
+
+    - fix handler intercepting all clicks on the toolbox, instead of just some well defined clicks.
 
 - 1.0.1 -- 2021-05-01
 
