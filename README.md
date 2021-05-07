@@ -1,6 +1,6 @@
 JimToolbox
 ===========
-2021-04-15 -> 2021-05-02
+2021-04-15 -> 2021-05-07
 
 
 
@@ -43,9 +43,13 @@ Summary
 History Log
 =============
 
+- 1.0.3 -- 2021-05-07
+
+    - update jim toolbox, now has a default z-index of 100
+  
 - 1.0.2 -- 2021-05-02
 
-    - fix handler intercepting all clicks on the toolbox, instead of just some well defined clicks.
+    - fix handler intercepting all clicks on the toolbox, instead of just some well-defined clicks.
 
 - 1.0.1 -- 2021-05-01
 
