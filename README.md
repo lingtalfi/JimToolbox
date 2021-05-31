@@ -43,6 +43,10 @@ Summary
 History Log
 =============
 
+- 1.0.4 -- 2021-05-31
+
+    - Removing trailing plus in lpi-deps file (to work with Light_PlanetInstaller:2.0.0 api
+
 - 1.0.3 -- 2021-05-07
 
     - update jim toolbox, now has a default z-index of 100
